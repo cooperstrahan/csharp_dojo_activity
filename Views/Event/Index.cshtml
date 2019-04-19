@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+</head>
+<body>
+    @model Home
+    <h1>Dojo Activity Center</h1>
+    <h3 >Welcome @Model.CurrentUser.FirstName</h3>
+    <br>
+    <a style="float: right;" href="/logout">Logout</a>
+    <hr>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Activity</th>
+                <th>Date and Time</th>
+                <th>Duration</th>
+                <th>Coordinator</th>
+                <th>No. Participants</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var e in Model.AllEvents)
+            {
+                <tr>
+                    <td> <a href="/activity/@e.EventId">@e.Activity</a></td>
+                    <td>@e.Date</td>
+                    <td>@e.Duration @e.DurationType</td>
+                    <td>@e.CreatorFirstName @e.CreatorLastName</td>
+                    <td>@e.Participants.Count</td>
+                    <td>
+                        @if(e.CreatorId == Model.CurrentUser.UserID)
+                        {
+                            <a href="/delete/@e.EventId">Delete</a>
+                        }
+                        else
+                        {
+                            if(e.Participants.Any(ce => ce.UserId == Model.CurrentUser.UserID))
+                            {
+                                <a href="/leave/@e.EventId">Leave</a>
+                            }
+                            else
+                            {
+                                <a href="/join/@e.EventId">Join</a>
+                            }
+                        }
+                        
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a href="/new"><button class="btn btn-primary">Add New Activity</button></a>
+    
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    @model ViewEvent
+    <h1>Dojo Activity Center</h1>
+    <a style="float: right;" href="/home">Home</a>
+    <br>
+    <a style="float: right;" href="/logout">Logout</a>
+    <hr>
+    @if(@Model.CurrentEvent.CreatorId == Model.CurrentUser.UserID)
+    {
+        <a style="float: right;" href="/delete/@Model.CurrentEvent.EventId"><button>Delete</button></a>
+    }
+    else
+    {
+        if(@Model.CurrentEvent.Participants.Any(ce => ce.UserId == Model.CurrentUser.UserID))
+        {
+            <a style="float: right;" href="/vleave/@Model.CurrentEvent.EventId"><button>Leave</button></a>
+        }
+        else
+        {
+            <a style="float: right;" href="/vjoin/@Model.CurrentEvent.EventId"><button>Join</button></a>
+        }
+    }
+    <h3>@Model.CurrentEvent.Activity</h3>
+
+    <h4>Event Coordinator: @Model.CurrentEvent.CreatorFirstName @Model.CurrentEvent.CreatorLastName</h4>
+
+    <h4>Description: @Model.CurrentEvent.Description</h4>
+
+    <h4>Participants:</h4>
+    @foreach (var item in Model.CurrentEvent.Participants)
+    {
+        <li>@item.User.FirstName @item.User.LastName</li>
+    }
+</body>
+</html>
